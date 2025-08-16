@@ -2,7 +2,19 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/",
+      "destination": "/en/index.html"
+    },
+    {
+      "source": "/:slug",
+      "destination": "/en/:slug"
+    },
+    {
       "source": "/en/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/en/index",
       "destination": "/index.html"
     },
     {
@@ -15,15 +27,11 @@
     },
     {
       "source": "/en/:slug",
-      "destination": "/post.html"
+      "destination": "/post.html?slug=:slug"
     },
     {
-      "source": "/en/:slug/",
-      "destination": "/post.html"
-    }
-    {
-      "source": "/en/profile/:username", 
-      "destination": "/en/profile.html" 
+      "source": "/en/profile/:username",
+      "destination": "/en/profile.html"
     }
   ],
   "headers": [
