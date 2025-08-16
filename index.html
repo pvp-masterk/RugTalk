@@ -1,204 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>RugTalk - RugPlay.com Blog</title>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<style>
-    body {
-        background-color: #000;
-        color: #ccc;
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
-
-    /* Header */
-    header {
-        padding: 20px;
-        background-color: #000;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .logo {
-        font-family: monospace;
-        font-size: 2rem;
-        font-weight: bold;
-        color: #00ff7f;
-        text-shadow: 0 0 8px #00ff7f;
-    }
-    nav {
-        display: flex;
-        gap: 20px;
-    }
-    nav a {
-        color: #ccc;
-        text-decoration: none;
-        font-weight: bold;
-    }
-    nav a:hover {
-        color: #00ff7f;
-        text-shadow: 0 0 5px #00ff7f;
-    }
-    .login-btn {
-        background: transparent;
-        border: 1px solid #00ff7f;
-        color: #00ff7f;
-        padding: 8px 16px;
-        cursor: pointer;
-        border-radius: 5px;
-        text-shadow: 0 0 5px #00ff7f;
-        transition: 0.3s;
-    }
-    .login-btn:hover {
-        background: #00ff7f;
-        color: #000;
-    }
-
-    /* Modal */
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.7);
-        justify-content: center;
-        align-items: center;
-    }
-    .modal-content {
-        background: #111;
-        padding: 30px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 0 15px #00ff7f;
-        max-width: 300px;
-    }
-    .modal h2 {
-        color: #00ff7f;
-        margin-bottom: 20px;
-    }
-    .google-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        font-weight: bold;
-        background: white;
-        color: black;
-        border-radius: 5px;
-    }
-    .google-btn img {
-        width: 20px;
-        height: 20px;
-    }
-    .close-btn {
-        margin-top: 15px;
-        cursor: pointer;
-        color: #ff4d4d;
-    }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RugTalk Blog</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <style>
+    body { background:#000; color:#ccc; font-family:Arial; margin:0; padding:0; }
+    .post-card { background:#111; padding:15px; margin:10px; border-radius:8px; }
+    .post-card h3 { color:#00ff7f; }
+    .admin-btn { background:#00ff7f; color:#000; padding:10px; margin:10px 0; cursor:pointer; }
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; }
+    .modal-content { background:#111; padding:20px; border-radius:8px; width:400px; }
+    .modal-content input, .modal-content textarea { width:100%; margin:8px 0; padding:8px; }
+  </style>
 </head>
 <body>
+  <h1 style="color:#00ff7f; text-align:center;">RugTalk</h1>
+  <div id="posts"></div>
+  <button class="admin-btn" id="createPostBtn" style="display:none;">Create Post</button>
 
-<header>
-    <div class="logo">RugTalk</div>
-    <div style="display:flex;gap:20px;align-items:center;">
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">Market Recaps</a>
-            <a href="#">Player Spotlights</a>
-            <a href="#">Tips</a>
-            <a href="#">Memes</a>
-            <a href="#">About</a>
-        </nav>
-        <button class="login-btn" id="loginBtn">Login</button>
-    </div>
-</header>
-
-<!-- Modal -->
-<div class="modal" id="loginModal">
+  <!-- Modal -->
+  <div class="modal" id="postModal">
     <div class="modal-content">
-        <h2>Login</h2>
-        <button class="google-btn" id="googleLogin">
-            <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google Logo">
-            Login with Google
-        </button>
-        <div class="close-btn" id="closeModal">Cancel</div>
+      <h2 style="color:#00ff7f;">New Post</h2>
+      <input type="text" id="postTitle" placeholder="Title">
+      <input type="text" id="postSlug" placeholder="Slug (e.g., moonrug-blast)">
+      <textarea id="postContent" rows="6" placeholder="Content"></textarea>
+      <input type="text" id="postThumbnail" placeholder="Thumbnail URL">
+      <button class="admin-btn" id="savePost">Save Post</button>
     </div>
-</div>
-
-<!-- Fake ticker -->
-<div class="ticker">
-    <div class="ticker-content">
-        $MOONRUG +420% 🔥 &nbsp; | &nbsp; $DOGERUG -69% 💀 &nbsp; | &nbsp; $PEEPEERUG +1337% 🚀 &nbsp; | &nbsp; $YOLOCOIN -42% 😂
-    </div>
-</div>
-
-<!-- Hero Section -->
-<section class="hero">
-    <h1>Your Weekly Dose of Moonshots & Rug Pulls.</h1>
-    <p>Tracking the highs, lows, and LOLs of RugPlay.com.</p>
-    <button class="cta-button">Read Latest Report</button>
-</section>
-
-<!-- Content (posts + sidebar)... keep from previous code -->
-<!-- ... -->
-
-<footer>
-    <div>
-        <a href="#">Discord</a> | 
-        <a href="#">Twitter/X</a>
-    </div>
-    <p>Not financial advice. This is all fake money.</p>
-</footer>
+  </div>
 
 <script>
-    // Supabase client
-    const supabase = window.supabase.createClient(
-        "https://izzvhkujuayztljqqzpq.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA"
-    );
+  const supabase = window.supabase.createClient(
+    "https://izzvhkujuayztljqqzpq.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA"
+  );
 
-    const loginBtn = document.getElementById("loginBtn");
-    const loginModal = document.getElementById("loginModal");
-    const closeModal = document.getElementById("closeModal");
-    const googleLogin = document.getElementById("googleLogin");
+  const postsDiv = document.getElementById("posts");
+  const createPostBtn = document.getElementById("createPostBtn");
+  const postModal = document.getElementById("postModal");
 
-    // Open modal
-    loginBtn.addEventListener("click", () => {
-        loginModal.style.display = "flex";
+  async function loadPosts() {
+    const { data: posts } = await supabase.from("posts").select("*").order("created_at", { ascending: false });
+    postsDiv.innerHTML = "";
+    posts.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "post-card";
+      div.innerHTML = `
+        <img src="${p.thumbnail_url || "https://via.placeholder.com/400x200"}" width="100%">
+        <h3><a href="/en/${p.slug}.html" style="color:#00ff7f;text-decoration:none;">${p.title}</a></h3>
+        <p>${p.excerpt || p.content.substring(0,100)+"..."}</p>
+      `;
+      postsDiv.appendChild(div);
     });
+  }
 
-    // Close modal
-    closeModal.addEventListener("click", () => {
-        loginModal.style.display = "none";
-    });
+  // Check if logged in + admin
+  async function checkAdmin() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) return;
+    const userId = session.user.id;
+    const { data: admin } = await supabase.from("admins").select("*").eq("user_id", userId).single();
+    if (admin) createPostBtn.style.display = "block";
+  }
 
-    // Login with Google
-    googleLogin.addEventListener("click", async () => {
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: "google"
-        });
-        if (error) console.error("Login error:", error.message);
-    });
+  createPostBtn.addEventListener("click", () => {
+    postModal.style.display = "flex";
+  });
 
-    // Check login state
-    supabase.auth.onAuthStateChange(async (event, session) => {
-        if (session?.user) {
-            loginBtn.textContent = session.user.email + " (Logout)";
-            loginBtn.onclick = async () => {
-                await supabase.auth.signOut();
-                loginBtn.textContent = "Login";
-                loginBtn.onclick = () => loginModal.style.display = "flex";
-            };
-            loginModal.style.display = "none";
-        }
-    });
+  document.getElementById("savePost").addEventListener("click", async () => {
+    const title = document.getElementById("postTitle").value;
+    const slug = document.getElementById("postSlug").value;
+    const content = document.getElementById("postContent").value;
+    const thumbnail = document.getElementById("postThumbnail").value;
+
+    await supabase.from("posts").insert([
+      { title, slug, content, thumbnail_url: thumbnail }
+    ]);
+
+    postModal.style.display = "none";
+    loadPosts();
+  });
+
+  loadPosts();
+  checkAdmin();
 </script>
-
 </body>
 </html>
