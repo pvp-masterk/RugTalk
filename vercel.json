@@ -21,6 +21,10 @@
       "source": "/en/:slug/",
       "destination": "/post.html"
     }
+    {
+      "source": "/en/profile/:username", 
+      "destination": "/en/profile.html" 
+    }
   ],
   "headers": [
     {
