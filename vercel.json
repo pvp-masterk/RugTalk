@@ -7,6 +7,10 @@
     {
       "source": "/en/:slug",
       "destination": "/post.html"
+    },
+    {
+      "source": "/en/:slug/",
+      "destination": "/post.html"
     }
   ]
 }
