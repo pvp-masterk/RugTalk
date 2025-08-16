@@ -8,6 +8,7 @@
 </head>
 <body style="background:#000;color:#ccc;font-family:Arial;">
   <div id="post"></div>
+  <p id="post-updated" class="text-gray-400 text-sm mt-2"></p>
 
 <script>
   const supabase = window.supabase.createClient("https://izzvhkujuayztljqqzpq.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA");
@@ -26,6 +27,15 @@
     `;
   }
   loadPost();
+document.getElementById("post-title").innerText = post.title;
+document.getElementById("post-content").innerHTML = post.content;
+
+const updatedAt = new Date(post.updated_at);
+document.getElementById("post-updated").innerText =
+  "Last Updated: " + updatedAt.toLocaleString();
+
+
+  
 </script>
 </body>
 </html>
