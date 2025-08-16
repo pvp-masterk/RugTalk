@@ -8,129 +8,73 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <script src="https://unpkg.com/scrollreveal"></script>
   <style>
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    @keyframes pulse-green {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
-    }
-    .float-animation {
-      animation: float 3s ease-in-out infinite;
-    }
-    .pulse-animation {
-      animation: pulse-green 2s infinite;
-    }
-    .gradient-text {
-      background: linear-gradient(90deg, #10b981, #3b82f6, #10b981);
-      background-size: 200% auto;
-      color: transparent;
-      -webkit-background-clip: text;
-      background-clip: text;
-      animation: shine 3s linear infinite;
-    }
-    @keyframes shine {
-      to { background-position: 200% center; }
-    }
-    .hover-scale {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .hover-scale:hover {
-      transform: scale(1.03);
-      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
-    }
-    .border-animation {
-      position: relative;
-    }
-    .border-animation::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #10b981, #3b82f6);
-      transition: width 0.3s ease;
-    }
-    .border-animation:hover::after {
-      width: 100%;
-    }
-    .typewriter {
-      overflow: hidden;
-      border-right: .15em solid #10b981;
-      white-space: nowrap;
-      margin: 0 auto;
-      letter-spacing: .15em;
-      animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-    }
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
-    }
-    @keyframes blink-caret {
-      from, to { border-color: transparent }
-      50% { border-color: #10b981; }
-    }
+    @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+    @keyframes pulse-green {0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.7);}70%{box-shadow:0 0 0 10px rgba(74,222,128,0);} }
+    .float-animation{animation:float 3s ease-in-out infinite;}
+    .pulse-animation{animation:pulse-green 2s infinite;}
+    .gradient-text{background:linear-gradient(90deg,#10b981,#3b82f6,#10b981);background-size:200% auto;color:transparent;-webkit-background-clip:text;background-clip:text;animation:shine 3s linear infinite;}
+    @keyframes shine{to{background-position:200% center;}}
+    .hover-scale{transition:transform 0.3s ease,box-shadow 0.3s ease;}
+    .hover-scale:hover{transform:scale(1.03);box-shadow:0 10px 25px -5px rgba(16,185,129,0.4);}
+    .border-animation{position:relative;}
+    .border-animation::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:linear-gradient(90deg,#10b981,#3b82f6);transition:width 0.3s ease;}
+    .border-animation:hover::after{width:100%;}
   </style>
 </head>
 <body class="bg-black text-white font-sans overflow-x-hidden">
 
-  <!-- Header with animated underline -->
+  <!-- Header -->
   <header class="flex items-center justify-between p-4 border-b border-gray-800 sticky top-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm">
     <h1 class="text-2xl font-mono font-bold text-green-400 hover:text-transparent hover:gradient-text transition-all duration-500">RugTalk</h1>
     <nav class="space-x-6 text-gray-300">
-      <a href="/en/" class="hover:text-green-400 border-animation transition-colors duration-300">Home</a>
-      <a href="/en/market-recaps" class="hover:text-green-400 border-animation transition-colors duration-300">About Us</a>
-      <a href="/en/player-spotlights" class="hover:text-green-400 border-animation transition-colors duration-300">Market</a>
-      <a href="/en/tips" class="hover:text-green-400 border-animation transition-colors duration-300">Tips</a>
-      <a href="/en/memes" class="hover:text-green-400 border-animation transition-colors duration-300">Memes</a>
-      <a href="/en/about" class="hover:text-green-400 border-animation transition-colors duration-300">Join Us</a>
+      <a href="/en/" class="hover:text-green-400 border-animation">Home</a>
+      <a href="/en/market-recaps" class="hover:text-green-400 border-animation">About Us</a>
+      <a href="/en/player-spotlights" class="hover:text-green-400 border-animation">Market</a>
+      <a href="/en/tips" class="hover:text-green-400 border-animation">Tips</a>
+      <a href="/en/memes" class="hover:text-green-400 border-animation">Memes</a>
+      <a href="/en/about" class="hover:text-green-400 border-animation">Join Us</a>
     </nav>
   </header>
 
-  <!-- Hero Section with animations -->
+  <!-- Hero -->
   <section class="text-center py-16 border-b border-gray-800 relative overflow-hidden">
     <div class="absolute inset-0 overflow-hidden">
       <div class="absolute top-0 left-0 w-20 h-20 bg-green-500 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
       <div class="absolute bottom-0 right-0 w-32 h-32 bg-green-400 rounded-full filter blur-3xl opacity-10 animate-pulse"></div>
     </div>
-    
     <div class="relative z-10">
       <h2 class="text-4xl font-mono text-green-400 mb-4 animate__animated animate__fadeInDown">
         <span class="gradient-text">The Best News Team on Rugplay</span>
       </h2>
       <p class="text-gray-400 mb-6 animate__animated animate__fadeIn animate__delay-1s">Stay up to date by joining our discord server.</p>
-      <button class="px-6 py-3 bg-green-500 hover:bg-green-600 text-black font-bold rounded-xl shadow-lg shadow-green-500/40 hover-scale pulse-animation transform transition-all duration-300 animate__animated animate__bounceIn animate__delay-2s">
+      <button class="px-6 py-3 bg-green-500 hover:bg-green-600 text-black font-bold rounded-xl shadow-lg shadow-green-500/40 hover-scale pulse-animation animate__animated animate__bounceIn animate__delay-2s">
         Read More
       </button>
     </div>
   </section>
 
+  <!-- Search -->
+  <div class="container mx-auto p-6 relative">
+    <div class="flex justify-center mb-6 relative">
+      <input id="searchInput" type="text" placeholder="Search posts..."
+        class="w-full md:w-1/2 p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-green-500 focus:outline-none" />
+    </div>
+    <div id="suggestions" class="absolute left-1/2 transform -translate-x-1/2 bg-gray-900 border border-gray-700 rounded-lg mt-1 w-full md:w-1/2 hidden z-50"></div>
+  </div>
 
-  <div class="flex justify-center mb-6">
-  <input id="searchInput" 
-    type="text" 
-    placeholder="Search posts..." 
-    class="w-full md:w-1/2 p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-green-500 focus:outline-none"
-  />
-</div>
+  <!-- Featured -->
+  <section id="featured" class="container mx-auto p-6 mb-10 hidden">
+    <h3 class="text-xl font-mono text-green-400 mb-4">⭐ Featured</h3>
+    <div id="featuredGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+  </section>
 
-  <div id="suggestions" class="absolute bg-gray-900 border border-gray-700 rounded-lg mt-1 w-full md:w-1/2 hidden"></div>
-
-  <section id="featured" class="mb-10">
-  <h3 class="text-xl font-mono text-green-400 mb-4">Featured</h3>
-  <div id="featuredGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-</section>
-
-
-  <!-- Main Content with animated grid -->
+  <!-- Latest Posts -->
   <main class="container mx-auto p-6">
-    <h3 class="text-xl font-mono text-green-400 mb-4 animate__animated animate__fadeIn">Latest Posts</h3>
+    <h3 class="text-xl font-mono text-green-400 mb-4">Latest Posts</h3>
     <div id="postsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
   </main>
 
-  <!-- Floating action button for admins -->
+  <!-- Floating Admin Button -->
   <div id="admin-fab" class="fixed bottom-8 right-8 hidden">
     <button class="w-14 h-14 bg-green-500 hover:bg-green-600 text-black font-bold rounded-full shadow-lg shadow-green-500/40 flex items-center justify-center hover-scale float-animation">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -139,15 +83,15 @@
     </button>
   </div>
 
-  <!-- Edit Popup with enhanced animation -->
+  <!-- Edit Popup -->
   <div id="edit-popup" class="fixed inset-0 hidden bg-black/70 flex items-center justify-center z-50">
     <div class="bg-gray-900 p-6 rounded-2xl shadow-xl w-96 transform transition-all duration-300 animate__animated animate__zoomIn animate__faster">
       <h3 class="text-green-400 font-mono mb-4 text-xl">Edit Post</h3>
-      <input id="edit-title" type="text" class="w-full p-3 mb-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200" placeholder="Post Title">
-      <textarea id="edit-content" rows="6" class="w-full p-3 mb-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200" placeholder="Post Content"></textarea>
+      <input id="edit-title" type="text" class="w-full p-3 mb-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-green-500" placeholder="Post Title">
+      <textarea id="edit-content" rows="6" class="w-full p-3 mb-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-green-500" placeholder="Post Content"></textarea>
       <div class="flex justify-end space-x-3">
-        <button onclick="closeEditPopup()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded transition-colors duration-300">Cancel</button>
-        <button id="save-edit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-black font-bold rounded transition-colors duration-300 hover-scale">Save</button>
+        <button onclick="closeEditPopup()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">Cancel</button>
+        <button id="save-edit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-black font-bold rounded hover-scale">Save</button>
       </div>
     </div>
   </div>
@@ -155,118 +99,90 @@
 <script type="module">
   import { createClient } from "https://esm.sh/@supabase/supabase-js";
 
-  // 🔑 Your Supabase credentials
   const supabaseUrl = "https://izzvhkujuayztljqqzpq.supabase.co";
   const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA";
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // State
-  let isAdmin = false;
   let posts = [];
   let editingPostId = null;
 
-  // DOM
   const postsGrid = document.getElementById("postsGrid");
+  const featuredGrid = document.getElementById("featuredGrid");
+  const featuredSection = document.getElementById("featured");
+  const searchInput = document.getElementById("searchInput");
+  const suggestionsBox = document.getElementById("suggestions");
   const editPopup = document.getElementById("edit-popup");
   const editTitle = document.getElementById("edit-title");
   const editContent = document.getElementById("edit-content");
   const saveEditBtn = document.getElementById("save-edit");
   const adminFab = document.getElementById("admin-fab");
-
-  // 🔎 Check if user is admin
-  async function checkAdmin() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return false;
-
-    const { data: adminCheck } = await supabase
-      .from("admins")
-      .select("user_id")
-      .eq("user_id", user.id)
-      .single();
-
-    return !!adminCheck;
-  }
+  let isAdmin = false;
 
   // 📰 Load posts
   async function loadPosts() {
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Error fetching posts:", error);
-      return;
-    }
-
+    const { data, error } = await supabase.from("posts").select("*").order("created_at", { ascending: false });
+    if (error) { console.error("Error fetching posts:", error); return; }
     posts = data;
-    postsGrid.innerHTML = "";
+    renderFeatured(posts.filter(p => p.pinned));
+    renderPosts(posts);
+  }
 
-    posts.forEach((post, index) => {
+  // ⭐ Featured
+  function renderFeatured(featured) {
+    if (featured.length === 0) { featuredSection.classList.add("hidden"); return; }
+    featuredSection.classList.remove("hidden");
+    featuredGrid.innerHTML = "";
+    featured.forEach(post => {
       const card = document.createElement("div");
-      card.className = `bg-gray-900 p-4 rounded-xl shadow-md border border-gray-800 hover-scale transition-all duration-300 overflow-hidden relative group`;
-
-      const featuredGrid = document.getElementById("featuredGrid");
-
-function renderFeatured(postsToRender) {
-  featuredGrid.innerHTML = "";
-  postsToRender.forEach(post => {
-    const card = document.createElement("div");
-    card.className = "bg-gradient-to-r from-green-900 to-gray-900 p-4 rounded-xl shadow-lg border border-green-600 hover-scale";
-    card.innerHTML = `
-      <h3 class="text-2xl font-bold text-green-300 mb-2">${post.title}</h3>
-      <p class="text-gray-300 mb-3">${post.excerpt || ""}</p>
-      <a href="/en/${post.slug}" class="text-green-400 hover:underline">Read More →</a>
-    `;
-    featuredGrid.appendChild(card);
-  });
-}
-
-// After fetching posts
-renderFeatured(posts.filter(p => p.pinned));
-
-      
-      // Add subtle glow on hover
+      card.className = "bg-gradient-to-r from-green-900 to-gray-900 p-4 rounded-xl shadow-lg border border-green-600 hover-scale";
       card.innerHTML = `
-        <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <img src="${post.thumbnail || "https://placehold.co/600x300"}" class="mb-3 rounded transform group-hover:scale-105 transition-transform duration-500" alt="">
-        <h3 class="text-green-400 font-mono text-lg mb-1 group-hover:text-white transition-colors duration-300">${post.title}</h3>
-        <p class="text-gray-400 text-sm mb-2 group-hover:text-gray-300 transition-colors duration-300">${post.excerpt || ""}</p>
-        <p class="text-gray-500 text-xs mb-3">Last Updated: ${new Date(post.updated_at).toLocaleString()}</p>
-        <a href="/en/${post.slug}" class="text-green-300 hover:underline hover:text-green-400 transition-colors duration-300 inline-flex items-center">
-          Read More
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </a>
-        <div class="flex items-center justify-between mt-3">
-  <button 
-    class="like-btn flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors duration-300"
-    data-id="${post.id}">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 2m0 0l-2-2m2 2l2 2m-2-2l-2 2"/>
-    </svg>
-    <span>${post.likes || 0}</span>
-  </button>
-</div>
-        <button class="edit-btn hidden bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mt-2 transition-all duration-300 transform hover:scale-105" data-id="${post.id}">
-          ✏️ Edit
-        </button>
+        <h3 class="text-2xl font-bold text-green-300 mb-2">${post.title}</h3>
+        <p class="text-gray-300 mb-3">${post.excerpt || ""}</p>
+        <a href="/en/${post.slug}" class="text-green-400 hover:underline">Read More →</a>
       `;
+      featuredGrid.appendChild(card);
+    });
+  }
 
+  // 🔎 Render posts
+  function renderPosts(postsToRender) {
+    postsGrid.innerHTML = "";
+    postsToRender.forEach((post, index) => {
+      const card = document.createElement("div");
+      card.className = "bg-gray-900 p-4 rounded-xl shadow-md border border-gray-800 hover-scale transition-all duration-300 overflow-hidden relative group";
+      card.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <img src="${post.thumbnail || "https://placehold.co/600x300"}" class="mb-3 rounded" alt="">
+        <h3 class="text-green-400 font-mono text-lg mb-1">${post.title}</h3>
+        <p class="text-gray-400 text-sm mb-2">${post.excerpt || ""}</p>
+        <p class="text-gray-500 text-xs mb-3">Last Updated: ${new Date(post.updated_at).toLocaleString()}</p>
+        <a href="/en/${post.slug}" class="text-green-300 hover:underline inline-flex items-center">Read More →</a>
+        <div class="flex items-center mt-3">
+          <button class="like-btn flex items-center space-x-2 text-gray-400 hover:text-green-400" data-id="${post.id}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 2m0 0l-2-2m2 2l2 2m-2-2l-2 2"/>
+            </svg>
+            <span>${post.likes || 0}</span>
+          </button>
+          <button class="edit-btn hidden bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded ml-3" data-id="${post.id}">✏️ Edit</button>
+        </div>
+      `;
       postsGrid.appendChild(card);
-      renderPosts(posts);
-      
-      // Animate each card with ScrollReveal
-      ScrollReveal().reveal(card, {
-        delay: index * 100,
-        distance: '20px',
-        origin: 'bottom',
-        easing: 'cubic-bezier(0.5, 0, 0, 1)',
-        reset: true
+      ScrollReveal().reveal(card, { delay:index*100, distance:'20px', origin:'bottom' });
+    });
+
+    // Like button handler
+    document.querySelectorAll(".like-btn").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const postId = e.currentTarget.dataset.id;
+        const post = posts.find(p => p.id == postId);
+        const newLikes = (post.likes || 0) + 1;
+        const { error } = await supabase.from("posts").update({ likes: newLikes }).eq("id", postId);
+        if (!error) { post.likes = newLikes; renderPosts(posts); }
       });
     });
 
+    // Show edit for admins
     if (isAdmin) {
       document.querySelectorAll(".edit-btn").forEach((btn) => {
         btn.classList.remove("hidden");
@@ -276,182 +192,62 @@ renderFeatured(posts.filter(p => p.pinned));
     }
   }
 
-  // 📝 Open edit popup
+  // Search + autocomplete
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const filtered = posts.filter(p => p.title.toLowerCase().includes(query) || (p.excerpt && p.excerpt.toLowerCase().includes(query)));
+    renderPosts(filtered);
+    if (!query) { suggestionsBox.classList.add("hidden"); return; }
+    const matches = posts.filter(p => p.title.toLowerCase().includes(query)).slice(0, 5);
+    if (matches.length === 0) { suggestionsBox.classList.add("hidden"); return; }
+    suggestionsBox.innerHTML = matches.map(p => `<div class="p-2 cursor-pointer hover:bg-gray-800 text-gray-300 hover:text-green-400" onclick="window.location='/en/${p.slug}'">${p.title}</div>`).join("");
+    suggestionsBox.classList.remove("hidden");
+  });
+  searchInput.addEventListener("blur", () => setTimeout(() => suggestionsBox.classList.add("hidden"), 150));
+
+  // 📝 Edit popup
   function openEditPopup(e) {
     editingPostId = e.target.dataset.id;
     const post = posts.find((p) => p.id == editingPostId);
-
     editTitle.value = post.title;
     editContent.value = post.content;
-
     editPopup.classList.remove("hidden");
     document.body.style.overflow = 'hidden';
   }
-
-  // ❌ Close popup
   window.closeEditPopup = function () {
     editPopup.classList.add("hidden");
     document.body.style.overflow = 'auto';
     editingPostId = null;
   };
-
-  // 💾 Save edits
   saveEditBtn.addEventListener("click", async () => {
     if (!editingPostId) return;
-
-    saveEditBtn.innerHTML = `
-      <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      Saving...
-    `;
-    saveEditBtn.disabled = true;
-
-    const { error } = await supabase
-      .from("posts")
-      .update({
-        title: editTitle.value,
-        content: editContent.value,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", editingPostId);
-
-    saveEditBtn.innerHTML = "Save";
-    saveEditBtn.disabled = false;
-
-    if (error) {
-      alert("Error updating post: " + error.message);
-    } else {
-      closeEditPopup();
-      loadPosts();
-    }
+    const { error } = await supabase.from("posts").update({ title: editTitle.value, content: editContent.value, updated_at: new Date().toISOString() }).eq("id", editingPostId);
+    if (!error) { closeEditPopup(); loadPosts(); }
   });
 
-  // Initialize ScrollReveal
-  ScrollReveal({ reset: true });
-
-  // 🚀 Init
+  // Init
   document.addEventListener('DOMContentLoaded', async () => {
-    isAdmin = await checkAdmin();
     await loadPosts();
-    
-    // Add floating particles animation
     addParticles();
   });
 
-  // ✨ Add floating particles effect
+  // ✨ Particles
   function addParticles() {
-    const colors = ['rgba(16, 185, 129, 0.3)', 'rgba(34, 211, 238, 0.3)', 'rgba(167, 243, 208, 0.3)'];
-    
+    const colors = ['rgba(16,185,129,0.3)','rgba(34,211,238,0.3)','rgba(167,243,208,0.3)'];
     for (let i = 0; i < 30; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'absolute rounded-full pointer-events-none';
-      
-      // Random properties
-      const size = Math.random() * 5 + 1;
-      const posX = Math.random() * window.innerWidth;
-      const posY = Math.random() * window.innerHeight;
-      const delay = Math.random() * 5;
-      const duration = Math.random() * 10 + 10;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.left = `${posX}px`;
-      particle.style.top = `${posY}px`;
-      particle.style.backgroundColor = color;
-      particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
-      
-      document.body.appendChild(particle);
+      const p = document.createElement('div');
+      p.className = 'absolute rounded-full pointer-events-none';
+      const size = Math.random()*5+1;
+      const posX = Math.random()*window.innerWidth;
+      const posY = Math.random()*window.innerHeight;
+      const delay = Math.random()*5;
+      const duration = Math.random()*10+10;
+      const color = colors[Math.floor(Math.random()*colors.length)];
+      p.style.width=`${size}px`;p.style.height=`${size}px`;p.style.left=`${posX}px`;p.style.top=`${posY}px`;p.style.backgroundColor=color;
+      p.style.animation=`float ${duration}s ease-in-out ${delay}s infinite`;
+      document.body.appendChild(p);
     }
   }
-  const searchInput = document.getElementById("searchInput");
-
-searchInput.addEventListener("input", () => {
-  const query = searchInput.value.toLowerCase();
-  const filteredPosts = posts.filter(
-    post => post.title.toLowerCase().includes(query) || 
-            (post.excerpt && post.excerpt.toLowerCase().includes(query))
-  );
-  renderPosts(filteredPosts);
-});
-
-function renderPosts(postsToRender) {
-  postsGrid.innerHTML = "";
-  postsToRender.forEach((post, index) => {
-    const card = document.createElement("div");
-    card.className = `bg-gray-900 p-4 rounded-xl shadow-md border border-gray-800 hover-scale transition-all duration-300 overflow-hidden relative group`;
-    card.innerHTML = `
-      <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      <img src="${post.thumbnail || "https://placehold.co/600x300"}" class="mb-3 rounded transform group-hover:scale-105 transition-transform duration-500" alt="">
-      <h3 class="text-green-400 font-mono text-lg mb-1 group-hover:text-white transition-colors duration-300">${post.title}</h3>
-      <p class="text-gray-400 text-sm mb-2 group-hover:text-gray-300 transition-colors duration-300">${post.excerpt || ""}</p>
-      <p class="text-gray-500 text-xs mb-3">Last Updated: ${new Date(post.updated_at).toLocaleString()}</p>
-      <a href="/en/${post.slug}" class="text-green-300 hover:underline hover:text-green-400 transition-colors duration-300 inline-flex items-center">
-        Read More
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </a>
-    `;
-    postsGrid.appendChild(card);
-
-    ScrollReveal().reveal(card, {
-      delay: index * 100,
-      distance: '20px',
-      origin: 'bottom',
-      easing: 'cubic-bezier(0.5, 0, 0, 1)',
-      reset: true
-    });
-  });
-}
-  document.querySelectorAll(".like-btn").forEach(btn => {
-  btn.addEventListener("click", async (e) => {
-    const postId = e.currentTarget.dataset.id;
-    const { data, error } = await supabase
-      .from("posts")
-      .update({ likes: (posts.find(p => p.id == postId).likes || 0) + 1 })
-      .eq("id", postId)
-      .select();
-
-    if (!error) {
-      posts.find(p => p.id == postId).likes = data[0].likes;
-      renderPosts(posts); // Refresh UI
-    }
-  });
-});
-const suggestionsBox = document.getElementById("suggestions");
-
-searchInput.addEventListener("input", () => {
-  const query = searchInput.value.toLowerCase();
-  if (!query) {
-    suggestionsBox.classList.add("hidden");
-    return;
-  }
-  
-  const matches = posts.filter(p => p.title.toLowerCase().includes(query)).slice(0, 5);
-  if (matches.length === 0) {
-    suggestionsBox.classList.add("hidden");
-    return;
-  }
-
-  suggestionsBox.innerHTML = matches.map(p => `
-    <div class="p-2 cursor-pointer hover:bg-gray-800 text-gray-300 hover:text-green-400" 
-         onclick="window.location='/en/${p.slug}'">
-      ${p.title}
-    </div>
-  `).join("");
-
-  suggestionsBox.classList.remove("hidden");
-});
-
-// Hide suggestions on blur
-searchInput.addEventListener("blur", () => {
-  setTimeout(() => suggestionsBox.classList.add("hidden"), 150);
-});
-
-
 </script>
 </body>
 </html>
