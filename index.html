@@ -107,6 +107,7 @@
     </div>
   </section>
 
+
   <div class="flex justify-center mb-6">
   <input id="searchInput" 
     type="text" 
@@ -114,6 +115,14 @@
     class="w-full md:w-1/2 p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-green-500 focus:outline-none"
   />
 </div>
+
+  <div id="suggestions" class="absolute bg-gray-900 border border-gray-700 rounded-lg mt-1 w-full md:w-1/2 hidden"></div>
+
+  <section id="featured" class="mb-10">
+  <h3 class="text-xl font-mono text-green-400 mb-4">Featured</h3>
+  <div id="featuredGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+</section>
+
 
   <!-- Main Content with animated grid -->
   <main class="container mx-auto p-6">
@@ -196,6 +205,26 @@
     posts.forEach((post, index) => {
       const card = document.createElement("div");
       card.className = `bg-gray-900 p-4 rounded-xl shadow-md border border-gray-800 hover-scale transition-all duration-300 overflow-hidden relative group`;
+
+      const featuredGrid = document.getElementById("featuredGrid");
+
+function renderFeatured(postsToRender) {
+  featuredGrid.innerHTML = "";
+  postsToRender.forEach(post => {
+    const card = document.createElement("div");
+    card.className = "bg-gradient-to-r from-green-900 to-gray-900 p-4 rounded-xl shadow-lg border border-green-600 hover-scale";
+    card.innerHTML = `
+      <h3 class="text-2xl font-bold text-green-300 mb-2">${post.title}</h3>
+      <p class="text-gray-300 mb-3">${post.excerpt || ""}</p>
+      <a href="/en/${post.slug}" class="text-green-400 hover:underline">Read More →</a>
+    `;
+    featuredGrid.appendChild(card);
+  });
+}
+
+// After fetching posts
+renderFeatured(posts.filter(p => p.pinned));
+
       
       // Add subtle glow on hover
       card.innerHTML = `
@@ -210,6 +239,16 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </a>
+        <div class="flex items-center justify-between mt-3">
+  <button 
+    class="like-btn flex items-center space-x-2 text-gray-400 hover:text-green-400 transition-colors duration-300"
+    data-id="${post.id}">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 9l-2 2m0 0l-2-2m2 2l2 2m-2-2l-2 2"/>
+    </svg>
+    <span>${post.likes || 0}</span>
+  </button>
+</div>
         <button class="edit-btn hidden bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mt-2 transition-all duration-300 transform hover:scale-105" data-id="${post.id}">
           ✏️ Edit
         </button>
@@ -367,6 +406,51 @@ function renderPosts(postsToRender) {
     });
   });
 }
+  document.querySelectorAll(".like-btn").forEach(btn => {
+  btn.addEventListener("click", async (e) => {
+    const postId = e.currentTarget.dataset.id;
+    const { data, error } = await supabase
+      .from("posts")
+      .update({ likes: (posts.find(p => p.id == postId).likes || 0) + 1 })
+      .eq("id", postId)
+      .select();
+
+    if (!error) {
+      posts.find(p => p.id == postId).likes = data[0].likes;
+      renderPosts(posts); // Refresh UI
+    }
+  });
+});
+const suggestionsBox = document.getElementById("suggestions");
+
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.toLowerCase();
+  if (!query) {
+    suggestionsBox.classList.add("hidden");
+    return;
+  }
+  
+  const matches = posts.filter(p => p.title.toLowerCase().includes(query)).slice(0, 5);
+  if (matches.length === 0) {
+    suggestionsBox.classList.add("hidden");
+    return;
+  }
+
+  suggestionsBox.innerHTML = matches.map(p => `
+    <div class="p-2 cursor-pointer hover:bg-gray-800 text-gray-300 hover:text-green-400" 
+         onclick="window.location='/en/${p.slug}'">
+      ${p.title}
+    </div>
+  `).join("");
+
+  suggestionsBox.classList.remove("hidden");
+});
+
+// Hide suggestions on blur
+searchInput.addEventListener("blur", () => {
+  setTimeout(() => suggestionsBox.classList.add("hidden"), 150);
+});
+
 
 </script>
 </body>
