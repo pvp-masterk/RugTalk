@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body style="background:#000;color:#ccc;font-family:Arial;">
+  <div id="post"></div>
+
+<script>
+  const supabase = window.supabase.createClient("https://izzvhkujuayztljqqzpq.supabase.co","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA");
+
+  // Get slug from URL (e.g., /en/slug.html → "slug")
+  const slug = window.location.pathname.split("/").pop().replace(".html","");
+
+  async function loadPost() {
+    const { data: post } = await supabase.from("posts").select("*").eq("slug", slug).single();
+    if (!post) { document.getElementById("post").innerHTML = "<h1>Not found</h1>"; return; }
+    document.title = post.title + " - RugTalk";
+    document.getElementById("post").innerHTML = `
+      <h1 style="color:#00ff7f;">${post.title}</h1>
+      <img src="${post.thumbnail_url || ""}" width="600">
+      <p>${post.content}</p>
+    `;
+  }
+  loadPost();
+</script>
+</body>
+</html>
