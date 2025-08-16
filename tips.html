@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tips - RugTalk</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
+    }
+    .gradient-text {
+      background: linear-gradient(90deg, #10b981, #3b82f6, #10b981);
+      background-size: 200% auto;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shine 3s linear infinite;
+    }
+    @keyframes shine {
+      to { background-position: 200% center; }
+    }
+    .hover-scale {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .hover-scale:hover {
+      transform: scale(1.03);
+      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+    }
+    .tip-card {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .tip-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .tip-card:hover::before {
+      opacity: 1;
+    }
+    .category-pill {
+      transition: all 0.3s ease;
+    }
+    .category-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+    }
+    .back-btn {
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover {
+      transform: translateX(-5px);
+    }
+    .prose {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .prose img {
+      border-radius: 12px;
+      margin: 2rem auto;
+      box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.2);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+  </style>
+</head>
+<body class="bg-black text-gray-300 font-sans min-h-screen">
+
+  <!-- Animated Header -->
+  <header class="sticky top-0 z-50 bg-black bg-opacity-90 backdrop-blur-sm border-b border-gray-800">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center animate__animated animate__fadeInDown">
+      <a href="/en/" class="text-green-400 font-mono text-xl font-bold hover:text-transparent hover:gradient-text transition-all duration-500">RugTalk</a>
+      <nav class="hidden md:flex space-x-6">
+        <a href="/en/market-recaps" class="text-gray-400 hover:text-green-400 transition-colors duration-300">Market Recaps</a>
+        <a href="/en/player-spotlights" class="text-gray-400 hover:text-green-400 transition-colors duration-300">Spotlights</a>
+        <a href="/en/tips" class="text-green-400 font-medium">Tips</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8 animate__animated animate__fadeIn">
+    <div class="max-w-6xl mx-auto">
+      <!-- Page Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-green-400 mb-4 animate__animated animate__fadeIn">RugPlay Tips</h1>
+        <p class="text-xl text-gray-400 max-w-2xl mx-auto animate__animated animate__fadeIn animate__delay-1s">
+          Expert strategies to maximize your gains and avoid those nasty rug pulls.
+        </p>
+      </div>
+
+      <!-- Categories Filter -->
+      <div class="flex flex-wrap justify-center gap-3 mb-8 animate__animated animate__fadeIn animate__delay-1s">
+        <button class="category-pill px-4 py-2 bg-green-500/10 text-green-400 rounded-full text-sm font-mono hover:bg-green-500/20 transition-all">
+          All Tips
+        </button>
+        <button class="category-pill px-4 py-2 bg-gray-800 text-gray-300 rounded-full text-sm font-mono hover:bg-gray-700 transition-all">
+          Beginners
+        </button>
+        <button class="category-pill px-4 py-2 bg-gray-800 text-gray-300 rounded-full text-sm font-mono hover:bg-gray-700 transition-all">
+          Advanced
+        </button>
+        <button class="category-pill px-4 py-2 bg-gray-800 text-gray-300 rounded-full text-sm font-mono hover:bg-gray-700 transition-all">
+          Security
+        </button>
+        <button class="category-pill px-4 py-2 bg-gray-800 text-gray-300 rounded-full text-sm font-mono hover:bg-gray-700 transition-all">
+          Trading
+        </button>
+      </div>
+
+      <!-- Tips Grid -->
+      <div id="tipsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Loading Skeleton -->
+        <div class="tip-card bg-gray-900 p-6 rounded-xl border border-gray-800 hover-scale animate-pulse h-64"></div>
+        <div class="tip-card bg-gray-900 p-6 rounded-xl border border-gray-800 hover-scale animate-pulse h-64"></div>
+        <div class="tip-card bg-gray-900 p-6 rounded-xl border border-gray-800 hover-scale animate-pulse h-64"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 border-t border-gray-800 py-8 mt-12 animate__animated animate__fadeInUp">
+    <div class="container mx-auto px-4 text-center text-gray-500 text-sm">
+      <p>© 2023 RugTalk. Tracking the highs, lows, and LOLs of RugPlay.com.</p>
+    </div>
+  </footer>
+
+<script>
+  const supabase = window.supabase.createClient(
+    "https://izzvhkujuayztljqqzpq.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA"
+  );
+
+  // Load tips from Supabase
+  async function loadTips() {
+    try {
+      const { data: tips, error } = await supabase
+        .from("tips")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      const tipsGrid = document.getElementById("tipsGrid");
+      tipsGrid.innerHTML = "";
+
+      if (!tips || tips.length === 0) {
+        tipsGrid.innerHTML = `
+          <div class="col-span-full text-center py-12">
+            <h3 class="text-xl text-gray-400 mb-4">No tips found</h3>
+            <p class="text-gray-500">Check back later for expert tips!</p>
+          </div>
+        `;
+        return;
+      }
+
+      tips.forEach((tip, index) => {
+        const tipCard = document.createElement("div");
+        tipCard.className = `tip-card bg-gray-900 p-6 rounded-xl border border-gray-800 hover-scale animate__animated animate__fadeInUp`;
+        tipCard.style.animationDelay = `${index * 100}ms`;
+
+        const updatedAt = new Date(tip.updated_at).toLocaleDateString();
+
+        tipCard.innerHTML = `
+          <div class="flex items-center mb-3">
+            <span class="px-3 py-1 bg-green-500/10 text-green-400 rounded-full text-xs font-mono">
+              ${tip.category || "General"}
+            </span>
+            <span class="ml-auto text-xs text-gray-500">${updatedAt}</span>
+          </div>
+          <h3 class="text-xl font-bold text-green-400 mb-2">${tip.title}</h3>
+          <p class="text-gray-400 mb-4">${tip.excerpt || ""}</p>
+          <div class="flex items-center justify-between">
+            <a href="/en/tips/${tip.slug}" class="text-green-300 hover:text-green-400 hover:underline transition-colors duration-300 inline-flex items-center">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </a>
+            <span class="text-xs text-gray-500">${tip.read_time || "5"} min read</span>
+          </div>
+        `;
+
+        tipsGrid.appendChild(tipCard);
+
+        // Animate with ScrollReveal
+        ScrollReveal().reveal(tipCard, {
+          delay: index * 100,
+          distance: '20px',
+          origin: 'bottom',
+          easing: 'cubic-bezier(0.5, 0, 0, 1)',
+          reset: true
+        });
+      });
+
+    } catch (err) {
+      console.error("Error loading tips:", err);
+      document.getElementById("tipsGrid").innerHTML = `
+        <div class="col-span-full text-center py-12">
+          <h3 class="text-xl text-red-400 mb-4">Error loading tips</h3>
+          <p class="text-gray-500 mb-4">We couldn't load the tips at this time.</p>
+          <button onclick="loadTips()" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-black font-medium rounded transition-colors duration-300">
+            Try Again
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  // Initialize ScrollReveal
+  ScrollReveal({ reset: true });
+
+  // Load tips when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    loadTips();
+    
+    // Add floating particles animation
+    addParticles();
+  });
+
+  // ✨ Add floating particles effect
+  function addParticles() {
+    const colors = ['rgba(16, 185, 129, 0.3)', 'rgba(34, 211, 238, 0.3)', 'rgba(167, 243, 208, 0.3)'];
+    
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'fixed rounded-full pointer-events-none z-0';
+      
+      // Random properties
+      const size = Math.random() * 5 + 1;
+      const posX = Math.random() * window.innerWidth;
+      const posY = Math.random() * window.innerHeight;
+      const delay = Math.random() * 5;
+      const duration = Math.random() * 10 + 10;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${posX}px`;
+      particle.style.top = `${posY}px`;
+      particle.style.backgroundColor = color;
+      particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+      
+      document.body.appendChild(particle);
+    }
+  }
+</script>
+</body>
+</html>
