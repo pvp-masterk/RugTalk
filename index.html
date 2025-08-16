@@ -32,6 +32,17 @@
     </div>
   </div>
 
+  <div id="edit-popup" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center">
+  <div class="bg-gray-900 p-6 rounded-xl w-96 text-white">
+    <h2 class="text-lg mb-4">Edit Post</h2>
+    <input id="edit-title" class="w-full mb-2 p-2 text-black" placeholder="Title">
+    <textarea id="edit-content" class="w-full mb-2 p-2 text-black" rows="6" placeholder="Content"></textarea>
+    <button id="save-edit" class="bg-green-500 px-4 py-2 rounded">Save</button>
+    <button onclick="closeEditPopup()" class="ml-2 text-red-400">Cancel</button>
+  </div>
+</div>
+
+
 <script>
   const supabase = window.supabase.createClient(
     "https://izzvhkujuayztljqqzpq.supabase.co",
@@ -86,6 +97,64 @@
 
   loadPosts();
   checkAdmin();
+
+posts.forEach(post => {
+  const card = document.createElement("div");
+  card.className = "post-card";
+
+  card.innerHTML = `
+    <img src="${post.thumbnail}" alt="">
+    <h3>${post.title}</h3>
+    <p>${post.excerpt}</p>
+    <a href="/en/${post.slug}">Read More</a>
+    <button class="edit-btn hidden" data-id="${post.id}">Edit</button>
+  `;
+
+  postsGrid.appendChild(card);
+});
+
+// After rendering, if user is admin, show edit buttons
+if (isAdmin) {
+  document.querySelectorAll(".edit-btn").forEach(btn => {
+    btn.classList.remove("hidden");
+    btn.addEventListener("click", openEditPopup);
+  });
+}
+
+  let editingPostId = null;
+
+function openEditPopup(e) {
+  editingPostId = e.target.dataset.id;
+  const post = posts.find(p => p.id === editingPostId);
+  document.getElementById("edit-title").value = post.title;
+  document.getElementById("edit-content").value = post.content;
+  document.getElementById("edit-popup").classList.remove("hidden");
+}
+
+function closeEditPopup() {
+  document.getElementById("edit-popup").classList.add("hidden");
+  editingPostId = null;
+}
+
+document.getElementById("save-edit").addEventListener("click", async () => {
+  const title = document.getElementById("edit-title").value;
+  const content = document.getElementById("edit-content").value;
+
+  const { error } = await supabase
+    .from("posts")
+    .update({ title, content })
+    .eq("id", editingPostId);
+
+  if (error) {
+    alert("Error updating post: " + error.message);
+  } else {
+    closeEditPopup();
+    location.reload(); // refresh to see changes
+  }
+});
+
+
+  
 </script>
 </body>
 </html>
