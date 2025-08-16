@@ -43,127 +43,127 @@
 </div>
 
 
-<script>
-  const supabase = window.supabase.createClient(
-    "https://izzvhkujuayztljqqzpq.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA"
-  );
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js";
 
-  const postsDiv = document.getElementById("posts");
-  const createPostBtn = document.getElementById("createPostBtn");
-  const postModal = document.getElementById("postModal");
+  // 🔑 Your Supabase credentials
+  const supabaseUrl = "https://izzvhkujuayztljqqzpq.supabase.co";
+  const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA";
+  const supabase = createClient(supabaseUrl, supabaseKey);
 
-  async function loadPosts() {
-    const { data: posts } = await supabase.from("posts").select("*").order("created_at", { ascending: false });
-    postsDiv.innerHTML = "";
-    posts.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "post-card";
-      div.innerHTML = `
-        <img src="${p.thumbnail_url || "https://via.placeholder.com/400x200"}" width="100%">
-        <h3><a href="/en/${p.slug}.html" style="color:#00ff7f;text-decoration:none;">${p.title}</a></h3>
-        <p>${p.excerpt || p.content.substring(0,100)+"..."}</p>
-      `;
-      postsDiv.appendChild(div);
-    });
-  }
-
-  // Check if logged in + admin
-  async function checkAdmin() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) return;
-    const userId = session.user.id;
-    const { data: admin } = await supabase.from("admins").select("*").eq("user_id", userId).single();
-    if (admin) createPostBtn.style.display = "block";
-  }
-
-  createPostBtn.addEventListener("click", () => {
-    postModal.style.display = "flex";
-  });
-
-  document.getElementById("savePost").addEventListener("click", async () => {
-    const title = document.getElementById("postTitle").value;
-    const slug = document.getElementById("postSlug").value;
-    const content = document.getElementById("postContent").value;
-    const thumbnail = document.getElementById("postThumbnail").value;
-
-    await supabase.from("posts").insert([
-      { title, slug, content, thumbnail_url: thumbnail }
-    ]);
-
-    postModal.style.display = "none";
-    loadPosts();
-  });
-
-  loadPosts();
-  checkAdmin();
-
-const { data: posts, error } = await supabase
-  .from("posts")
-  .select("*")
-  .order("created_at", { ascending: false });
-
-if (error) {
-  console.error("Error fetching posts:", error);
-} else {
-  posts.forEach(post => {
-    const card = document.createElement("div");
-    card.className = "post-card";
-
-    card.innerHTML = `
-      <img src="${post.thumbnail}" alt="">
-      <h3>${post.title}</h3>
-      <p>${post.excerpt}</p>
-      <a href="/en/${post.slug}">Read More</a>
-      <button class="edit-btn hidden" data-id="${post.id}">✏️ Edit</button>
-    `;
-
-    document.getElementById("postsGrid").appendChild(card);
-  });
-
-  if (isAdmin) {
-    document.querySelectorAll(".edit-btn").forEach(btn => {
-      btn.classList.remove("hidden");
-      btn.addEventListener("click", openEditPopup);
-    });
-  }
-}
-
-
+  // State
+  let isAdmin = false;
+  let posts = [];
   let editingPostId = null;
 
-function openEditPopup(e) {
-  editingPostId = e.target.dataset.id;
-  const post = posts.find(p => p.id === editingPostId);
-  document.getElementById("edit-title").value = post.title;
-  document.getElementById("edit-content").value = post.content;
-  document.getElementById("edit-popup").classList.remove("hidden");
-}
+  // DOM Elements
+  const postsGrid = document.getElementById("postsGrid");
+  const editPopup = document.getElementById("edit-popup");
+  const editTitle = document.getElementById("edit-title");
+  const editContent = document.getElementById("edit-content");
+  const saveEditBtn = document.getElementById("save-edit");
 
-function closeEditPopup() {
-  document.getElementById("edit-popup").classList.add("hidden");
-  editingPostId = null;
-}
+  // 🔎 Check if user is admin
+  async function checkAdmin() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-document.getElementById("save-edit").addEventListener("click", async () => {
-  const title = document.getElementById("edit-title").value;
-  const content = document.getElementById("edit-content").value;
+    if (!user) return false;
 
-  const { error } = await supabase
-    .from("posts")
-    .update({ title, content })
-    .eq("id", editingPostId);
+    const { data: adminCheck } = await supabase
+      .from("admins")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .single();
 
-  if (error) {
-    alert("Error updating post: " + error.message);
-  } else {
-    closeEditPopup();
-    location.reload(); // refresh to see changes
+    return !!adminCheck;
   }
-});
 
+  // 📰 Load posts
+  async function loadPosts() {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false });
 
-  
+    if (error) {
+      console.error("Error fetching posts:", error);
+      return;
+    }
+
+    posts = data;
+
+    postsGrid.innerHTML = ""; // clear grid
+
+    posts.forEach((post) => {
+      const card = document.createElement("div");
+      card.className =
+        "bg-gray-900 p-4 rounded-xl shadow-md border border-gray-800";
+
+      const updatedAt = new Date(post.updated_at).toLocaleString();
+
+      card.innerHTML = `
+        <img src="${post.thumbnail || "https://placehold.co/600x300"}" class="mb-3 rounded" alt="">
+        <h3 class="text-green-400 font-mono text-lg mb-1">${post.title}</h3>
+        <p class="text-gray-400 text-sm mb-2">${post.excerpt || ""}</p>
+        <p class="text-gray-500 text-xs mb-3">Last Updated: ${updatedAt}</p>
+        <a href="/en/${post.slug}" class="text-green-300 hover:underline">Read More</a>
+        <button class="edit-btn hidden bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded mt-2" data-id="${post.id}">✏️ Edit</button>
+      `;
+
+      postsGrid.appendChild(card);
+    });
+
+    if (isAdmin) {
+      document.querySelectorAll(".edit-btn").forEach((btn) => {
+        btn.classList.remove("hidden");
+        btn.addEventListener("click", openEditPopup);
+      });
+    }
+  }
+
+  // 📝 Open Edit Popup
+  function openEditPopup(e) {
+    editingPostId = e.target.dataset.id;
+    const post = posts.find((p) => p.id === editingPostId);
+
+    editTitle.value = post.title;
+    editContent.value = post.content;
+
+    editPopup.classList.remove("hidden");
+  }
+
+  // ❌ Close Edit Popup
+  window.closeEditPopup = function () {
+    editPopup.classList.add("hidden");
+    editingPostId = null;
+  };
+
+  // 💾 Save Edited Post
+  saveEditBtn.addEventListener("click", async () => {
+    if (!editingPostId) return;
+
+    const { error } = await supabase
+      .from("posts")
+      .update({
+        title: editTitle.value,
+        content: editContent.value,
+      })
+      .eq("id", editingPostId);
+
+    if (error) {
+      alert("Error updating post: " + error.message);
+    } else {
+      closeEditPopup();
+      loadPosts(); // refresh
+    }
+  });
+
+  // 🚀 Init
+  isAdmin = await checkAdmin();
+  loadPosts();
 </script>
+
 </body>
 </html>
