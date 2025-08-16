@@ -3,35 +3,27 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/en/index.html"
-    },
-    {
-      "source": "/:slug",
-      "destination": "/en/:slug"
-    },
-    {
-      "source": "/en/",
       "destination": "/index.html"
     },
     {
-      "source": "/en/index",
+      "source": "/index",
       "destination": "/index.html"
     },
     {
-      "source": "/en/tips",
+      "source": "/tips",
       "destination": "/tips.html"
     },
     {
-      "source": "/en/tips/:slug",
+      "source": "/tips/:slug",
       "destination": "/post.html?slug=:slug"
     },
     {
-      "source": "/en/:slug",
+      "source": "/:slug",
       "destination": "/post.html?slug=:slug"
     },
     {
-      "source": "/en/profile/:username",
-      "destination": "/en/profile.html"
+      "source": "/profile/:username",
+      "destination": "/profile.html"
     }
   ],
   "headers": [
