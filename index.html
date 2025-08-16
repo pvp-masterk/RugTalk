@@ -98,28 +98,37 @@
   loadPosts();
   checkAdmin();
 
-posts.forEach(post => {
-  const card = document.createElement("div");
-  card.className = "post-card";
+const { data: posts, error } = await supabase
+  .from("posts")
+  .select("*")
+  .order("created_at", { ascending: false });
 
-  card.innerHTML = `
-    <img src="${post.thumbnail}" alt="">
-    <h3>${post.title}</h3>
-    <p>${post.excerpt}</p>
-    <a href="/en/${post.slug}">Read More</a>
-    <button class="edit-btn hidden" data-id="${post.id}">Edit</button>
-  `;
+if (error) {
+  console.error("Error fetching posts:", error);
+} else {
+  posts.forEach(post => {
+    const card = document.createElement("div");
+    card.className = "post-card";
 
-  postsGrid.appendChild(card);
-});
+    card.innerHTML = `
+      <img src="${post.thumbnail}" alt="">
+      <h3>${post.title}</h3>
+      <p>${post.excerpt}</p>
+      <a href="/en/${post.slug}">Read More</a>
+      <button class="edit-btn hidden" data-id="${post.id}">✏️ Edit</button>
+    `;
 
-// After rendering, if user is admin, show edit buttons
-if (isAdmin) {
-  document.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.classList.remove("hidden");
-    btn.addEventListener("click", openEditPopup);
+    document.getElementById("postsGrid").appendChild(card);
   });
+
+  if (isAdmin) {
+    document.querySelectorAll(".edit-btn").forEach(btn => {
+      btn.classList.remove("hidden");
+      btn.addEventListener("click", openEditPopup);
+    });
+  }
 }
+
 
   let editingPostId = null;
 
