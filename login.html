@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | RugTalk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js";
+
+    const supabaseUrl = "https://izzvhkujuayztljqqzpq.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA";
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const googleBtn = document.getElementById("google-login");
+
+    googleBtn.addEventListener("click", async () => {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/en/", // after login go home
+        }
+      });
+
+      if (error) {
+        alert("Login failed: " + error.message);
+      }
+    });
+  </script>
+</head>
+<body class="bg-black text-gray-200 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="flex items-center justify-between p-4 border-b border-gray-800 bg-black bg-opacity-90">
+    <h1 class="text-2xl font-mono font-bold text-green-400">
+      <a href="/en/">RugTalk</a>
+    </h1>
+  </header>
+
+  <!-- Login Section -->
+  <main class="flex flex-1 items-center justify-center p-6">
+    <div class="bg-gray-900 p-8 rounded-2xl shadow-xl w-full max-w-md text-center">
+      <h2 class="text-2xl font-bold text-green-400 mb-6">Login to RugTalk</h2>
+
+      <!-- Google Login Button -->
+      <button id="google-login"
+        class="w-full flex items-center justify-center space-x-3 px-4 py-3 bg-white text-black font-semibold rounded-lg shadow hover:bg-gray-100 transition">
+        <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google" class="w-5 h-5">
+        <span>Continue with Google</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 border-t border-gray-800 py-6 text-center text-gray-500 text-sm">
+    © 2025 RugTalk
+  </footer>
+</body>
+</html>
