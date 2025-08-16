@@ -1,11 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/index.html/en",
-      "destination": "/en/index.html"
+      "source": "/en/",
+      "destination": "/index.html"
     },
     {
-      "source": "/index.html/en/:slug",
+      "source": "/en/:slug",
       "destination": "/post.html"
     }
   ]
