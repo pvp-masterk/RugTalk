@@ -3,46 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RugTalk Blog</title>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <style>
-    body { background:#000; color:#ccc; font-family:Arial; margin:0; padding:0; }
-    .post-card { background:#111; padding:15px; margin:10px; border-radius:8px; }
-    .post-card h3 { color:#00ff7f; }
-    .admin-btn { background:#00ff7f; color:#000; padding:10px; margin:10px 0; cursor:pointer; }
-    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; }
-    .modal-content { background:#111; padding:20px; border-radius:8px; width:400px; }
-    .modal-content input, .modal-content textarea { width:100%; margin:8px 0; padding:8px; }
-  </style>
+  <title>RugTalk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1 style="color:#00ff7f; text-align:center;">RugTalk</h1>
-  <div id="posts"></div>
-  <button class="admin-btn" id="createPostBtn" style="display:none;">Create Post</button>
+<body class="bg-black text-white font-sans">
 
-  <!-- Modal -->
-  <div class="modal" id="postModal">
-    <div class="modal-content">
-      <h2 style="color:#00ff7f;">New Post</h2>
-      <input type="text" id="postTitle" placeholder="Title">
-      <input type="text" id="postSlug" placeholder="Slug (e.g., moonrug-blast)">
-      <textarea id="postContent" rows="6" placeholder="Content"></textarea>
-      <input type="text" id="postThumbnail" placeholder="Thumbnail URL">
-      <button class="admin-btn" id="savePost">Save Post</button>
+  <!-- Header -->
+  <header class="flex items-center justify-between p-4 border-b border-gray-800">
+    <h1 class="text-2xl font-mono font-bold text-green-400">RugTalk</h1>
+    <nav class="space-x-6 text-gray-300">
+      <a href="/en/" class="hover:text-green-400">Home</a>
+      <a href="/en/market-recaps" class="hover:text-green-400">Market Recaps</a>
+      <a href="/en/player-spotlights" class="hover:text-green-400">Player Spotlights</a>
+      <a href="/en/tips" class="hover:text-green-400">Tips</a>
+      <a href="/en/memes" class="hover:text-green-400">Memes</a>
+      <a href="/en/about" class="hover:text-green-400">About</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="text-center py-16 border-b border-gray-800">
+    <h2 class="text-4xl font-mono text-green-400 mb-4">Your Weekly Dose of Moonshots & Rug Pulls.</h2>
+    <p class="text-gray-400 mb-6">Tracking the highs, lows, and LOLs of RugPlay.com.</p>
+    <button class="px-6 py-3 bg-green-500 hover:bg-green-600 text-black font-bold rounded-xl shadow-lg shadow-green-500/40">
+      Read Latest Report
+    </button>
+  </section>
+
+  <!-- Main Content -->
+  <main class="container mx-auto p-6">
+    <h3 class="text-xl font-mono text-green-400 mb-4">Latest Posts</h3>
+    <div id="postsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+  </main>
+
+  <!-- Edit Popup -->
+  <div id="edit-popup" class="fixed inset-0 hidden bg-black/70 flex items-center justify-center">
+    <div class="bg-gray-900 p-6 rounded-2xl shadow-xl w-96">
+      <h3 class="text-green-400 font-mono mb-4">Edit Post</h3>
+      <input id="edit-title" type="text" class="w-full p-2 mb-3 bg-black border border-gray-700 rounded text-white" placeholder="Post Title">
+      <textarea id="edit-content" rows="6" class="w-full p-2 mb-3 bg-black border border-gray-700 rounded text-white" placeholder="Post Content"></textarea>
+      <div class="flex justify-end space-x-3">
+        <button onclick="closeEditPopup()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded">Cancel</button>
+        <button id="save-edit" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-black font-bold rounded">Save</button>
+      </div>
     </div>
   </div>
-
-  <div id="edit-popup" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center">
-  <div class="bg-gray-900 p-6 rounded-xl w-96 text-white">
-    <h2 class="text-lg mb-4">Edit Post</h2>
-    <input id="edit-title" class="w-full mb-2 p-2 text-black" placeholder="Title">
-    <textarea id="edit-content" class="w-full mb-2 p-2 text-black" rows="6" placeholder="Content"></textarea>
-    <button id="save-edit" class="bg-green-500 px-4 py-2 rounded">Save</button>
-    <button onclick="closeEditPopup()" class="ml-2 text-red-400">Cancel</button>
-  </div>
-</div>
-<div id="postsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-
 
 <script type="module">
   import { createClient } from "https://esm.sh/@supabase/supabase-js";
@@ -52,119 +57,114 @@
   const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6enZoa3VqdWF5enRsanFxenBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTg3MTAsImV4cCI6MjA3MDg5NDcxMH0.eWiFN7QENi6acY5wMc9SOHDHzQERWX-yB9iyOn6ydHA";
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // State
-  let isAdmin = false;
-  let posts = [];
-  let editingPostId = null;
+    // State
+    let isAdmin = false;
+    let posts = [];
+    let editingPostId = null;
 
-  // DOM Elements
-  const postsGrid = document.getElementById("postsGrid");
-  const editPopup = document.getElementById("edit-popup");
-  const editTitle = document.getElementById("edit-title");
-  const editContent = document.getElementById("edit-content");
-  const saveEditBtn = document.getElementById("save-edit");
+    // DOM
+    const postsGrid = document.getElementById("postsGrid");
+    const editPopup = document.getElementById("edit-popup");
+    const editTitle = document.getElementById("edit-title");
+    const editContent = document.getElementById("edit-content");
+    const saveEditBtn = document.getElementById("save-edit");
 
-  // 🔎 Check if user is admin
-  async function checkAdmin() {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // 🔎 Check if user is admin
+    async function checkAdmin() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return false;
 
-    if (!user) return false;
+      const { data: adminCheck } = await supabase
+        .from("admins")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .single();
 
-    const { data: adminCheck } = await supabase
-      .from("admins")
-      .select("user_id")
-      .eq("user_id", user.id)
-      .single();
-
-    return !!adminCheck;
-  }
-
-  // 📰 Load posts
-  async function loadPosts() {
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Error fetching posts:", error);
-      return;
+      return !!adminCheck;
     }
 
-    posts = data;
+    // 📰 Load posts
+    async function loadPosts() {
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    postsGrid.innerHTML = ""; // clear grid
+      if (error) {
+        console.error("Error fetching posts:", error);
+        return;
+      }
 
-    posts.forEach((post) => {
-      const card = document.createElement("div");
-      card.className =
-        "bg-gray-900 p-4 rounded-xl shadow-md border border-gray-800";
+      posts = data;
+      postsGrid.innerHTML = "";
 
-      const updatedAt = new Date(post.updated_at).toLocaleString();
+      posts.forEach((post) => {
+        const card = document.createElement("div");
+        card.className = "bg-gray-900 p-4 rounded-xl shadow-md border border-gray-800";
 
-      card.innerHTML = `
-        <img src="${post.thumbnail || "https://placehold.co/600x300"}" class="mb-3 rounded" alt="">
-        <h3 class="text-green-400 font-mono text-lg mb-1">${post.title}</h3>
-        <p class="text-gray-400 text-sm mb-2">${post.excerpt || ""}</p>
-        <p class="text-gray-500 text-xs mb-3">Last Updated: ${updatedAt}</p>
-        <a href="/en/${post.slug}" class="text-green-300 hover:underline">Read More</a>
-        <button class="edit-btn hidden bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded mt-2" data-id="${post.id}">✏️ Edit</button>
-      `;
+        const updatedAt = new Date(post.updated_at).toLocaleString();
 
-      postsGrid.appendChild(card);
+        card.innerHTML = `
+          <img src="${post.thumbnail || "https://placehold.co/600x300"}" class="mb-3 rounded" alt="">
+          <h3 class="text-green-400 font-mono text-lg mb-1">${post.title}</h3>
+          <p class="text-gray-400 text-sm mb-2">${post.excerpt || ""}</p>
+          <p class="text-gray-500 text-xs mb-3">Last Updated: ${updatedAt}</p>
+          <a href="/en/${post.slug}" class="text-green-300 hover:underline">Read More</a>
+          <button class="edit-btn hidden bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded mt-2" data-id="${post.id}">✏️ Edit</button>
+        `;
+
+        postsGrid.appendChild(card);
+      });
+
+      if (isAdmin) {
+        document.querySelectorAll(".edit-btn").forEach((btn) => {
+          btn.classList.remove("hidden");
+          btn.addEventListener("click", openEditPopup);
+        });
+      }
+    }
+
+    // 📝 Open edit popup
+    function openEditPopup(e) {
+      editingPostId = e.target.dataset.id;
+      const post = posts.find((p) => p.id == editingPostId);
+
+      editTitle.value = post.title;
+      editContent.value = post.content;
+
+      editPopup.classList.remove("hidden");
+    }
+
+    // ❌ Close popup
+    window.closeEditPopup = function () {
+      editPopup.classList.add("hidden");
+      editingPostId = null;
+    };
+
+    // 💾 Save edits
+    saveEditBtn.addEventListener("click", async () => {
+      if (!editingPostId) return;
+
+      const { error } = await supabase
+        .from("posts")
+        .update({
+          title: editTitle.value,
+          content: editContent.value,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", editingPostId);
+
+      if (error) {
+        alert("Error updating post: " + error.message);
+      } else {
+        closeEditPopup();
+        loadPosts();
+      }
     });
 
-    if (isAdmin) {
-      document.querySelectorAll(".edit-btn").forEach((btn) => {
-        btn.classList.remove("hidden");
-        btn.addEventListener("click", openEditPopup);
-      });
-    }
-  }
-
-  // 📝 Open Edit Popup
-  function openEditPopup(e) {
-    editingPostId = e.target.dataset.id;
-    const post = posts.find((p) => p.id === editingPostId);
-
-    editTitle.value = post.title;
-    editContent.value = post.content;
-
-    editPopup.classList.remove("hidden");
-  }
-
-  // ❌ Close Edit Popup
-  window.closeEditPopup = function () {
-    editPopup.classList.add("hidden");
-    editingPostId = null;
-  };
-
-  // 💾 Save Edited Post
-  saveEditBtn.addEventListener("click", async () => {
-    if (!editingPostId) return;
-
-    const { error } = await supabase
-      .from("posts")
-      .update({
-        title: editTitle.value,
-        content: editContent.value,
-      })
-      .eq("id", editingPostId);
-
-    if (error) {
-      alert("Error updating post: " + error.message);
-    } else {
-      closeEditPopup();
-      loadPosts(); // refresh
-    }
-  });
-
-  // 🚀 Init
-  isAdmin = await checkAdmin();
-  loadPosts();
-</script>
-
+    // 🚀 Init
+    isAdmin = await checkAdmin();
+    loadPosts();
+  </script>
 </body>
 </html>
