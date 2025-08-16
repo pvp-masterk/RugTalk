@@ -1,8 +1,17 @@
 {
+  "version": 2,
   "rewrites": [
     {
       "source": "/en/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/en/tips",
+      "destination": "/tips.html"
+    },
+    {
+      "source": "/en/tips/:slug",
+      "destination": "/post.html?slug=:slug"
     },
     {
       "source": "/en/:slug",
@@ -11,6 +20,17 @@
     {
       "source": "/en/:slug/",
       "destination": "/post.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=3600, stale-while-revalidate=86400"
+        }
+      ]
     }
   ]
 }
